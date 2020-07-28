@@ -59,7 +59,7 @@ COPY apollo/ /apollo/apollo
 ADD build* /apollo/
 ADD settings.gradle /apollo
 ADD application.properties /apollo
-RUN ls -la /apollo
+RUN ls -l /apollo/*/*
 
 COPY docker-files/build.sh /bin/build.sh
 ADD docker-files/docker-apollo-config.groovy /apollo/apollo-config.groovy
@@ -84,7 +84,7 @@ RUN curl -s get.sdkman.io | bash && \
      /bin/bash -c "source $HOME/.sdkman/bin/sdkman-init.sh && yes | sdk install gradle 3.2.1"
 
 RUN /bin/bash -c "source $HOME/.sdkman/bin/sdkman-init.sh && /bin/bash /bin/build.sh"
-
+RUN ls -l /apollo/
 USER root
 # remove from webapps and copy it into a staging directory
 RUN rm -rf ${CATALINA_BASE}/webapps/* && \
