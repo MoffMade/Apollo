@@ -1277,6 +1277,9 @@ class OrganismController {
     , @RestApiParam(name = "metadata", type = "string", paramType = RestApiParamType.QUERY, description = "organism metadata")
     , @RestApiParam(name = "organismData", type = "file", paramType = RestApiParamType.QUERY, description = "zip or tar.gz compressed data directory (if other options not used).  Blat data should include a .2bit suffix and be in a directory 'searchDatabaseData'")
     , @RestApiParam(name = "noReloadSequences", type = "boolean", paramType = RestApiParamType.QUERY, description = "(default false) If set to true, then sequences will not be reloaded if the organism directory changes.")
+    , @RestApiParam(name = "returnAllOrganisms", type = "boolean", paramType = RestApiParamType.QUERY, description = "(optional) Return all organisms (true / false) (default true)")
+  ])
+  @Transactional
   ])
   @Transactional
   def updateOrganismInfo() {
@@ -1349,6 +1352,8 @@ class OrganismController {
       } else {
         throw new Exception('organism not found')
       }
+      Boolean returnAllOrganisms = organismJson.returnAllOrganisms!=null ? Boolean.valueOf(organismJson.returnAllOrganisms) : true
+      render returnAllOrganisms ? findAllOrganisms() : new JSONArray()
       findAllOrganisms()
     }
     catch (e) {
